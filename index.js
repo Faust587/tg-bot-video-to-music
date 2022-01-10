@@ -8,15 +8,15 @@ const bot = new Telegraf(process.env.bot_token);
 bot.start(ctx => ctx.reply("Hello"));
 
 bot.command(COMMANDS, ctx => {
-  ctx.reply("TAKE YOUR FUCKING COMMANDS!");
+  ctx.reply("TAKE YOUR COMMANDS!");
 });
 
 bot.command(ABOUT, ctx => {
-  ctx.reply("TAKE YOUR FUCKING ABOUT!");
+  ctx.reply("TAKE YOUR ABOUT!");
 });
 
 bot.command(AUTHOR, ctx => {
-  ctx.reply("TAKE YOUR FUCKING AUTHOR!");
+  ctx.reply("TAKE YOUR AUTHOR!");
 });
 
 connector.connect();
