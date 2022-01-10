@@ -24,8 +24,9 @@
   },
   "homepage": "https://github.com/Faust587/tg-bot-video-to-music#readme",
   "dependencies": {
+    "dotenv": "^10.0.0",
+    "mongoose": "^6.1.5",
     "nodemon": "^2.0.15",
-    "telegraf": "^4.5.2",
-    "dotenv": "^10.0.0"
+    "telegraf": "^4.5.2"
   }
 }
