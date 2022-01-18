@@ -1,5 +1,7 @@
 module.exports = {
-  COMMANDS: "commands",
-  ABOUT: "about",
-  AUTHOR: "author",
+  START: 'start',
+  COMMANDS: 'commands',
+  ABOUT: 'about',
+  AUTHOR: 'author',
+  LANGUAGE: 'language',
 };
