@@ -10,8 +10,8 @@ require('dotenv').config();
 const bot = new Telegraf(process.env.bot_token);
 
 bot.command(START, async ctx => {
-  const {userId} = ctx.update.message.from;
-  const registration = await userRegistration(userId);
+  const {id} = ctx.update.message.from;
+  const registration = await userRegistration(id);
   await AnalyticsService(START);
 
   if (registration) {
