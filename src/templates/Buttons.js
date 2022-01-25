@@ -1,8 +1,8 @@
 const languageButtons = [
-  { text: "🇺🇦", callback_data: "ua" },
-  { text: "🇬🇧", callback_data: "en" },
-  { text: "🇷🇺", callback_data: "ru" },
-  { text: "🇨🇳", callback_data: "cn" },
+  { text: "🇺🇦", callback_data: 'changeLang ua' },
+  { text: "🇬🇧", callback_data: 'changeLang en' },
+  { text: "🇷🇺", callback_data: 'changeLang ru' },
+  { text: "🇨🇳", callback_data: 'changeLang cn' },
 ];
 
 module.exports = { languageButtons };
