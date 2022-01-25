@@ -15,7 +15,7 @@ bot.command(START, async ctx => {
   const registration = await userRegistration(id);
 
   if (registration) {
-    ctx.reply(languages.EN.CHOOSE_LANGUAGE_TEXT, {
+    ctx.reply(languages['en'].CHOOSE_LANGUAGE_TEXT, {
       reply_markup: {
         inline_keyboard: [
           languageButtons
@@ -61,7 +61,14 @@ bot.on('callback_query', async ctx => {
       break;
     }
   }
-})
+});
+
+bot.on('video', async ctx => {
+  const {id} = ctx.update.message.from;
+  const userLang = await UserService.getUserLanguage(id);
+
+
+});
 
 connector.connect();
 bot.launch().then(r => r ? console.log(r) : console.log('Bot has been started....'));
