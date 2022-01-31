@@ -64,9 +64,6 @@ bot.on('callback_query', async ctx => {
 });
 
 bot.on('video', async ctx => {
-  const {id} = ctx.update.message.from;
-  const userLang = await UserService.getUserLanguage(id);
-
 
 });
 
