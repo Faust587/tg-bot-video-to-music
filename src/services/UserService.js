@@ -9,7 +9,12 @@ async function getUserLanguage (userId) {
   return lang;
 }
 
+const getUrlToUserVideo = async ctx => {
+  return await ctx.tg.getFileLink(ctx.update.message.video.file_id);
+}
+
 module.exports = {
   changeUserLang,
   getUserLanguage,
+  getUrlToUserVideo,
 }
