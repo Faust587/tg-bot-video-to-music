@@ -5,6 +5,7 @@ const languages = require('./src/constants/Text');
 const { languageButtons } = require('./src/markdown/Buttons');
 const AnalyticsService = require('./src/services/AnalyticsService');
 const UserService = require('./src/services/UserService');
+const ConvertService = require('./src/services/ConvertingService');
 const { userRegistration } = require('./src/controllers/UserController');
 require('dotenv').config();
 
