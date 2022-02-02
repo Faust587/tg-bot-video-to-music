@@ -1,4 +1,4 @@
 module.exports = {
-  MIN: 10,
-  MAX: 99,
+  MIN: 100000,
+  MAX: 999999,
 }

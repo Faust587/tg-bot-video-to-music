@@ -1,4 +1,5 @@
 const fs = require('fs');
+const http = require('https');
 
 const { MIN, MAX } = require('../constants/FileName');
 const { VIDEO_FOLDER, MUSIC_FOLDER } = require('../constants/Path');
@@ -29,6 +30,27 @@ const getRandomInteger = () => {
   return Math.floor(rand);
 }
 
+const saveUserVideo = (name, url) => {
+  const result = {
+    ok: true,
+    error: "",
+  };
+
+  const videoPath = `${VIDEO_FOLDER}/${name}.mp4`;
+  try {
+    http.get(url, response => {
+      const file = fs.createWriteStream(videoPath);
+      response.pipe(file);
+    });
+  } catch (e) {
+    const errorText = JSON.stringify(e, null, 2);
+    result.ok = false;
+    result.error = errorText;
+  }
+  return result;
+};
+
 module.exports = {
   getUniqueName,
+  saveUserVideo,
 };
