@@ -24,6 +24,8 @@
   },
   "homepage": "https://github.com/Faust587/tg-bot-video-to-music#readme",
   "dependencies": {
+    "@ffmpeg-installer/ffmpeg": "^1.0.20",
+    "fluent-ffmpeg": "^2.1.2",
     "dotenv": "^10.0.0",
     "mongoose": "^6.1.5",
     "nodemon": "^2.0.15",
