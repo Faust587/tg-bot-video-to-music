@@ -1,5 +1,8 @@
 const fs = require('fs');
 const http = require('https');
+const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path;
+const ffmpeg = require('fluent-ffmpeg');
+ffmpeg.setFfmpegPath(ffmpegPath);
 
 const { MIN, MAX } = require('../constants/FileName');
 const { VIDEO_FOLDER, MUSIC_FOLDER } = require('../constants/Path');
@@ -43,12 +46,29 @@ const saveUserVideo = (name, url) => {
       response.pipe(file);
     });
   } catch (e) {
-    const errorText = JSON.stringify(e, null, 2);
+    const errorText = JSON.stringify(e.response.description, null, 2);
     result.ok = false;
     result.error = errorText;
   }
   return result;
 };
+
+const convertVideoToMusic = (file, fileName) => {
+  const result = {
+    ok: true,
+    error: "",
+  };
+  try {
+    ffmpeg(`${VIDEO_FOLDER}/${fileName}.mp4`)
+      .output(`${MUSIC_FOLDER}/${fileName}.mp3`)
+      .run();
+  } catch (e) {
+    const errorText = JSON.stringify(e, null, 2);
+    result.ok = false;
+    result.error = errorText;
+  }
+  return result;
+}
 
 module.exports = {
   getUniqueName,
