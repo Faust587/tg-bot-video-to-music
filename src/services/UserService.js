@@ -1,27 +1,27 @@
 const UserModel = require('../models/User');
 
 async function changeUserLang (userId, value) {
-  await UserModel.findByIdAndUpdate(userId, {lang: value});
+  await UserModel.findOneAndUpdate({userId}, {lang: value});
 }
 
 async function getUserLanguage (userId) {
-  const { lang } = await UserModel.findById(userId);
+  const {lang} = await UserModel.findOne({userId})
   return lang;
 }
 
-const getUrlToUserVideo = async ctx => {
+const getLinkToUserVideo = async ctx => {
   const result = {
     ok: true,
     link: null,
     error: "",
   };
+
   try {
-    const fileLink = await ctx.tg.getFileLink(ctx.update.message.video.file_id);
-    result.link = fileLink;
+    result.link = await ctx.tg.getFileLink(ctx.update.message.video.file_id);
   } catch (e) {
-    const errorText = e.response.description;
-    result.ok = false;
-    result.error = errorText;
+    const {ok, description} = e.response;
+    result.ok = ok;
+    result.error = description;
   }
 
   return result;
@@ -30,5 +30,5 @@ const getUrlToUserVideo = async ctx => {
 module.exports = {
   changeUserLang,
   getUserLanguage,
-  getUrlToUserVideo,
+  getLinkToUserVideo,
 }
