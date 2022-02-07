@@ -1,9 +1,9 @@
-const mongoose = require('mongoose');
+require('mongoose');
 const AnalyticsSchema = require('../models/Analytics');
 
 const AnalyticsService = async trigger => {
-  const { value } = await AnalyticsSchema.findById( trigger );
-  await AnalyticsSchema.findOneAndUpdate({ _id: trigger}, { value: value+1 });
+  const { value } = await AnalyticsSchema.findOne( { type: trigger } );
+  await AnalyticsSchema.findOneAndUpdate({ type: trigger}, { value: value+1 });
 }
 
 module.exports = AnalyticsService;
