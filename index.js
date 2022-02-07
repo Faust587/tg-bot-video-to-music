@@ -5,8 +5,9 @@ const languages = require('./src/constants/Text');
 const { languageButtons } = require('./src/markdown/Buttons');
 const AnalyticsService = require('./src/services/AnalyticsService');
 const UserService = require('./src/services/UserService');
-const ConvertService = require('./src/services/ConvertingService');
+const ConvertingController = require('./src/controllers/ConvertingController');
 const { userRegistration } = require('./src/controllers/UserController');
+const fs = require("fs");
 require('dotenv').config();
 
 const bot = new Telegraf(process.env.bot_token);
@@ -65,7 +66,18 @@ bot.on('callback_query', async ctx => {
 });
 
 bot.on('video', async ctx => {
+  const convertUserVideo = await ConvertingController.convertUserVideo(ctx);
+  const {videoPath, musicPath} = convertUserVideo.filesPath;
 
+  if (!convertUserVideo.ok) {
+    await ctx.reply('Something went wrong, please try again.... Our admins work with that problem');
+  } else if (convertUserVideo.fileIsTooBig) {
+    await ctx.reply('Sorry, Telegram does not allow me to process file with weight more than 20mb');
+  } else {
+    await ctx.replyWithAudio({ source: fs.createReadStream(musicPath)});
+  }
+  fs.unlinkSync(musicPath);
+  fs.unlinkSync(videoPath);
 });
 
 connector.connect();

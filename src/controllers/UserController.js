@@ -1,9 +1,10 @@
-const UserSchema = require("../models/User");
+const UserModel = require("../models/User");
 
 const userRegistration = async userId => {
-  const userExists = await UserSchema.findById(userId);
+  const userExists = await UserModel.findOne({userId});
+
   if (!userExists) {
-    await UserSchema.create({ _id: userId });
+    await UserModel.create({ userId: userId });
     return true;
   }
   return false;

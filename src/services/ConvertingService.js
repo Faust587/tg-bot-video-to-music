@@ -5,7 +5,7 @@ const ffmpeg = require('fluent-ffmpeg');
 ffmpeg.setFfmpegPath(ffmpegPath);
 
 const { MIN, MAX } = require('../constants/FileName');
-const { VIDEO_FOLDER, MUSIC_FOLDER } = require('../constants/Path');
+const { MUSIC_FOLDER } = require('../constants/Path');
 
 const getUniqueName = () => {
   const fileNameList = getFileNameList();
@@ -33,44 +33,51 @@ const getRandomInteger = () => {
   return Math.floor(rand);
 }
 
-const saveUserVideo = (name, url) => {
+const saveUserVideo = (url, fileStream) => {
   const result = {
-    ok: true,
-    error: "",
+    ok: false,
+    error: null,
   };
 
-  const videoPath = `${VIDEO_FOLDER}/${name}.mp4`;
-  try {
-    http.get(url, response => {
-      const file = fs.createWriteStream(videoPath);
-      response.pipe(file);
-    });
-  } catch (e) {
-    const errorText = JSON.stringify(e.response.description, null, 2);
-    result.ok = false;
-    result.error = errorText;
-  }
-  return result;
-};
+  return new Promise((resolve) => {
+    try {
+      http.get(url, response => {
+        response.pipe(fileStream).on('finish', () => {
+          result.ok = true;
+          resolve(result);
+        })
+      });
+    } catch (e) {
+      result.error = JSON.stringify(e.response.description, null, 2);
+      resolve(result);
+    }
+  });
+}
 
-const convertVideoToMusic = (file, fileName) => {
+const convertVideoToMusic = (videoPath, musicPath) => {
   const result = {
-    ok: true,
-    error: "",
+    ok: false,
+    error: null,
   };
-  try {
-    ffmpeg(`${VIDEO_FOLDER}/${fileName}.mp4`)
-      .output(`${MUSIC_FOLDER}/${fileName}.mp3`)
-      .run();
-  } catch (e) {
-    const errorText = JSON.stringify(e, null, 2);
-    result.ok = false;
-    result.error = errorText;
-  }
-  return result;
+
+  return new Promise((resolve) => {
+    try {
+      ffmpeg(videoPath)
+        .output(musicPath)
+        .on('end', () => {
+          result.ok = true;
+          resolve(result);
+        })
+        .run();
+    } catch (e) {
+      result.error = JSON.stringify(e, null, 2);
+      resolve(result);
+    }
+  });
 }
 
 module.exports = {
   getUniqueName,
   saveUserVideo,
+  convertVideoToMusic,
 };
