@@ -5,6 +5,7 @@ const languages = require('./src/constants/Text');
 const { languageButtons } = require('./src/markdown/Buttons');
 const AnalyticsService = require('./src/services/AnalyticsService');
 const UserService = require('./src/services/UserService');
+const ValidationService = require('./src/services/ValidationService');
 const ConvertingController = require('./src/controllers/ConvertingController');
 const { userRegistration } = require('./src/controllers/UserController');
 const fs = require("fs");
@@ -79,6 +80,10 @@ bot.on('video', async ctx => {
   fs.unlinkSync(musicPath);
   fs.unlinkSync(videoPath);
 });
+
+bot.on('message', ctx => {
+  const validationResult = ValidationService.validateUserLink(ctx.message.text);
+})
 
 connector.connect();
 bot.launch().then(r => r ? console.log(r) : console.log('Bot has been started....'));
