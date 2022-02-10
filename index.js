@@ -81,8 +81,38 @@ bot.on('video', async ctx => {
   fs.unlinkSync(videoPath);
 });
 
-bot.on('message', ctx => {
-  const validationResult = ValidationService.validateUserLink(ctx.message.text);
+bot.on('message', async ctx => {
+  const validationResult = await ValidationService.validateUserLink(ctx.message.text);
+  if (validationResult.ok) {
+    switch (validationResult.type) {
+      case 'youtube': {
+        const convertingResult = await ConvertingController.convertYouTubeLinkToVideo(ctx, validationResult.link);
+        const {videoPath, musicPath} = convertingResult.filesPath;
+        if (!convertingResult.ok) {
+          await ctx.reply('Something went wrong, please try again.... Our admins work with that problem');
+        } else {
+          await ctx.replyWithAudio({ source: fs.createReadStream(musicPath)});
+          fs.unlinkSync(musicPath);
+          fs.unlinkSync(videoPath);
+        }
+        break;
+      }
+      case 'tiktok': {
+        const convertingResult = await ConvertingController.convertingTikTokVideo(ctx, validationResult.link);
+        const {videoPath, musicPath} = convertingResult.filesPath;
+        if (!convertingResult.ok) {
+          await ctx.reply('Something went wrong, please try again.... Our admins work with that problem');
+        } else {
+          await ctx.replyWithAudio({ source: fs.createReadStream(musicPath)});
+          fs.unlinkSync(musicPath);
+          fs.unlinkSync(videoPath);
+        }
+        break;
+      }
+    }
+  } else {
+    ctx.reply("SHIT");
+  }
 })
 
 connector.connect();
