@@ -25,10 +25,14 @@
   "homepage": "https://github.com/Faust587/tg-bot-video-to-music#readme",
   "dependencies": {
     "@ffmpeg-installer/ffmpeg": "^1.0.20",
-    "fluent-ffmpeg": "^2.1.2",
     "dotenv": "^10.0.0",
+    "fluent-ffmpeg": "^2.1.2",
     "mongoose": "^6.1.5",
     "nodemon": "^2.0.15",
-    "telegraf": "^4.5.2"
+    "request": "^2.88.2",
+    "telegraf": "^4.5.2",
+    "tiktok-downloader": "^0.0.4",
+    "tiktok-scraper": "^1.4.36",
+    "ytdl-core": "^4.10.1"
   }
 }

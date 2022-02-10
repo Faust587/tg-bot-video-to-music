@@ -7,9 +7,7 @@ const reportError = async (ctx, error) => {
   }
 
   const adminList = adminListResult.result;
-  console.log(adminList);
   adminList.map(async admin => {
-    console.log(admin)
     await ctx.telegram.sendMessage(admin.userId, error);
   });
 };

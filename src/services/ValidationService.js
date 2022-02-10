@@ -20,17 +20,20 @@ const validateUserVideoLink = videoLink => {
   return validationResult;
 };
 
-const validateUserLink = url => {
+const validateUserLink = async url => {
   const result = {
     ok: true,
     type: null,
-    url: url
+    link: url
   }
-  const YouTubeRegexp = /https:\/\/www.youtube.com\/watch?/;
-  const TikTokRegexp = /https:\/\/www.tiktok.com\//;
-  if (url.match(YouTubeRegexp)) {
+
+  const youtubeRegex = /https:\/\/www.youtube.com\/watch?/;
+  const tiktokShortLinkRegex = /https:\/\/vm.tiktok.com\//;
+  const tiktokLongLinkRegex = /https:\/\/www.tiktok.com\//;
+
+  if (url.match(youtubeRegex)) {
     result.type = 'youtube';
-  } else if (url.match(TikTokRegexp)) {
+  } else if (url.match(tiktokShortLinkRegex) || url.match(tiktokLongLinkRegex)) {
     result.type = 'tiktok';
   } else {
     result.ok = false;

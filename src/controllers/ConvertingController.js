@@ -27,6 +27,9 @@ const convertUserVideo = async ctx => {
   const fileName = ConvertingService.getUniqueName();
   const videoPath = `${VIDEO_FOLDER}/${fileName}.mp4`;
   const musicPath = `${MUSIC_FOLDER}/${fileName}.mp3`;
+
+  result.filesPath = {videoPath, musicPath};
+
   const fileStream = fs.createWriteStream(videoPath);
 
   const saveVideoResult = await ConvertingService.saveUserVideo(videoLink.link, fileStream);
@@ -41,14 +44,96 @@ const convertUserVideo = async ctx => {
 
   if (!convertingResult.ok) {
     result.ok = false;
-    await ReportErrorsService.reportError(ctx, saveVideoResult.error);
+    await ReportErrorsService.reportError(ctx, convertingResult.error);
     return result;
   }
 
-  result.filesPath = {videoPath, musicPath};
   return result;
 };
 
+const convertYouTubeLinkToVideo = async (ctx, link) => {
+  const result = {
+    ok: true,
+    filesPath: {},
+  };
+
+  const fileName = ConvertingService.getUniqueName();
+  const videoPath = `${VIDEO_FOLDER}/${fileName}.mp4`;
+  const musicPath = `${MUSIC_FOLDER}/${fileName}.mp3`;
+
+  result.filesPath = {videoPath, musicPath};
+
+  const fileStream = fs.createWriteStream(videoPath);
+  const downloadingResult = await ConvertingService.downloadVideoFromYouTube(link, fileStream);
+
+  if (!downloadingResult.ok) {
+    result.ok = false;
+    await ReportErrorsService.reportError(ctx, downloadingResult.error);
+    return result;
+  }
+
+  const convertingResult = await ConvertingService.convertVideoToMusic(videoPath, musicPath);
+
+  if (!convertingResult.ok) {
+    result.ok = false;
+    await ReportErrorsService.reportError(ctx, convertingResult.error);
+    return result;
+  }
+
+  return result;
+};
+
+const convertingTikTokVideo = async (ctx, link) => {
+  const result = {
+    ok: true,
+    filesPath: {},
+  };
+
+
+  const fileName = ConvertingService.getUniqueName();
+  const videoPath = `${VIDEO_FOLDER}/${fileName}.mp4`;
+  const musicPath = `${MUSIC_FOLDER}/${fileName}.mp3`;
+
+  result.filesPath = {videoPath, musicPath};
+
+  const getLocationResult = await ConvertingService.getTikTokLocation(link);
+
+  if (!getLocationResult.ok) {
+    result.ok = false;
+    await ReportErrorsService.reportError(ctx, getLocationResult.error);
+    return result;
+  }
+
+  const getDownloadLinkResult = await ConvertingService.getDownloadingLinkTikTok(getLocationResult.uri);
+
+  if (!getDownloadLinkResult.ok) {
+    result.ok = false;
+    await ReportErrorsService.reportError(ctx, getDownloadLinkResult.error);
+    return result;
+  }
+
+  const fileStream = fs.createWriteStream(videoPath);
+  const downloadingResult = await ConvertingService.saveUserVideo(getDownloadLinkResult.link, fileStream);
+
+  if (!downloadingResult.ok) {
+    result.ok = false;
+    await ReportErrorsService.reportError(ctx, downloadingResult.error);
+    return result;
+  }
+
+  const convertingResult = await ConvertingService.convertVideoToMusic(videoPath, musicPath);
+
+  if (!convertingResult.ok) {
+    result.ok = false;
+    await ReportErrorsService.reportError(ctx, convertingResult.error);
+    return result;
+  }
+
+  return result;
+}
+
 module.exports = {
   convertUserVideo,
+  convertYouTubeLinkToVideo,
+  convertingTikTokVideo,
 };
