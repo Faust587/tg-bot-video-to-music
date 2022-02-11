@@ -4,4 +4,7 @@ module.exports = {
   ABOUT: 'about',
   AUTHOR: 'author',
   LANGUAGE: 'language',
+  VIDEO: 'video',
+  TIKTOK: 'tiktok',
+  YOUTUBE: 'youtube',
 };

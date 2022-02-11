@@ -2,10 +2,11 @@ const UserService = require('../services/UserService');
 const ValidationService = require('../services/ValidationService');
 const ReportErrorsService = require('../services/ReportErrorsService');
 const ConvertingService = require('../services/ConvertingService');
+const language = require('../constants/Text');
 const {VIDEO_FOLDER, MUSIC_FOLDER} = require("../constants/Path");
 const fs = require("fs");
 
-const convertUserVideo = async ctx => {
+const convertUserVideo = async (ctx, lang) => {
   const result = {
     ok: true,
     filesPath: {},
@@ -32,6 +33,8 @@ const convertUserVideo = async ctx => {
 
   const fileStream = fs.createWriteStream(videoPath);
 
+  await UserService.sendMessage(ctx, language[lang].DOWNLOADING_VIDEO);
+
   const saveVideoResult = await ConvertingService.saveUserVideo(videoLink.link, fileStream);
 
   if (!saveVideoResult.ok) {
@@ -39,6 +42,8 @@ const convertUserVideo = async ctx => {
     await ReportErrorsService.reportError(ctx, saveVideoResult.error);
     return result;
   }
+
+  await UserService.sendMessage(ctx, language[lang].CONVERTING_VIDEO);
 
   const convertingResult = await ConvertingService.convertVideoToMusic(videoPath, musicPath);
 
@@ -51,7 +56,7 @@ const convertUserVideo = async ctx => {
   return result;
 };
 
-const convertYouTubeLinkToVideo = async (ctx, link) => {
+const convertYouTubeLinkToVideo = async (ctx, link, lang) => {
   const result = {
     ok: true,
     filesPath: {},
@@ -64,6 +69,9 @@ const convertYouTubeLinkToVideo = async (ctx, link) => {
   result.filesPath = {videoPath, musicPath};
 
   const fileStream = fs.createWriteStream(videoPath);
+
+  await UserService.sendMessage(ctx, language[lang].DOWNLOADING_VIDEO);
+
   const downloadingResult = await ConvertingService.downloadVideoFromYouTube(link, fileStream);
 
   if (!downloadingResult.ok) {
@@ -71,6 +79,8 @@ const convertYouTubeLinkToVideo = async (ctx, link) => {
     await ReportErrorsService.reportError(ctx, downloadingResult.error);
     return result;
   }
+
+  await UserService.sendMessage(ctx, language[lang].CONVERTING_VIDEO);
 
   const convertingResult = await ConvertingService.convertVideoToMusic(videoPath, musicPath);
 
@@ -83,7 +93,7 @@ const convertYouTubeLinkToVideo = async (ctx, link) => {
   return result;
 };
 
-const convertingTikTokVideo = async (ctx, link) => {
+const convertingTikTokVideo = async (ctx, link, lang) => {
   const result = {
     ok: true,
     filesPath: {},
@@ -113,6 +123,9 @@ const convertingTikTokVideo = async (ctx, link) => {
   }
 
   const fileStream = fs.createWriteStream(videoPath);
+
+  await UserService.sendMessage(ctx, language[lang].DOWNLOADING_VIDEO);
+
   const downloadingResult = await ConvertingService.saveUserVideo(getDownloadLinkResult.link, fileStream);
 
   if (!downloadingResult.ok) {
@@ -120,6 +133,8 @@ const convertingTikTokVideo = async (ctx, link) => {
     await ReportErrorsService.reportError(ctx, downloadingResult.error);
     return result;
   }
+
+  await UserService.sendMessage(ctx, language[lang].CONVERTING_VIDEO);
 
   const convertingResult = await ConvertingService.convertVideoToMusic(videoPath, musicPath);
 

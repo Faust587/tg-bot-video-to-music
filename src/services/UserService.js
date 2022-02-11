@@ -9,6 +9,10 @@ async function getUserLanguage (userId) {
   return lang;
 }
 
+async function sendMessage (ctx, msg) {
+  await ctx.reply(msg);
+}
+
 const getLinkToUserVideo = async ctx => {
   const result = {
     ok: true,
@@ -28,6 +32,7 @@ const getLinkToUserVideo = async ctx => {
 }
 
 module.exports = {
+  sendMessage,
   changeUserLang,
   getUserLanguage,
   getLinkToUserVideo,

@@ -20,12 +20,20 @@ const validateUserVideoLink = videoLink => {
   return validationResult;
 };
 
-const validateUserLink = async url => {
+const validateUserLink = async msg => {
   const result = {
     ok: true,
     type: null,
-    link: url
+    link: null
   }
+
+  if (msg.text === undefined) {
+    result.ok = false;
+    return result
+  }
+
+  const url = msg.text;
+  result.link = url;
 
   const youtubeShortRegex = /https:\/\/youtu.be\//;
   const youtubeLongRegex = /https:\/\/www.youtube.com\//;
