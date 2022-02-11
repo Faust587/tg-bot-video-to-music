@@ -27,11 +27,12 @@ const validateUserLink = async url => {
     link: url
   }
 
-  const youtubeRegex = /https:\/\/www.youtube.com\/watch?/;
+  const youtubeShortRegex = /https:\/\/youtu.be\//;
+  const youtubeLongRegex = /https:\/\/www.youtube.com\//;
   const tiktokShortLinkRegex = /https:\/\/vm.tiktok.com\//;
   const tiktokLongLinkRegex = /https:\/\/www.tiktok.com\//;
 
-  if (url.match(youtubeRegex)) {
+  if (url.match(youtubeShortRegex) || url.match(youtubeLongRegex)) {
     result.type = 'youtube';
   } else if (url.match(tiktokShortLinkRegex) || url.match(tiktokLongLinkRegex)) {
     result.type = 'tiktok';

@@ -11,7 +11,8 @@ const { userRegistration } = require('./src/controllers/UserController');
 const fs = require("fs");
 require('dotenv').config();
 
-const bot = new Telegraf(process.env.bot_token);
+const bot = new Telegraf(process.env.bot_token, {handlerTimeout: 9_000_000});
+
 
 bot.command(START, async ctx => {
   const {id} = ctx.update.message.from;
