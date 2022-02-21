@@ -114,7 +114,7 @@ const convertingTikTokVideo = async (ctx, link, lang) => {
     return result;
   }
 
-  const getDownloadLinkResult = await ConvertingService.getDownloadingLinkTikTok(getLocationResult.uri);
+  const getDownloadLinkResult = await ConvertingService.getDownloadingLinkTikTok(getLocationResult.id);
 
   if (!getDownloadLinkResult.ok) {
     result.ok = false;

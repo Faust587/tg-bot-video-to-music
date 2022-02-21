@@ -107,7 +107,7 @@ const convertVideoToMusic = (videoPath, musicPath) => {
 const getTikTokLocation = async uri => {
   const result = {
     ok: false,
-    uri: null,
+    id: null,
     error: null,
   }
 
@@ -123,35 +123,33 @@ const getTikTokLocation = async uri => {
           resolve(result);
         }
         result.ok = true;
-        result.uri = httpResponse.headers.location;
+        const location = httpResponse.headers.location;
+        if (location.includes('m.tiktok.com')) {
+          result.id = location.split('/v/')[1].split('.html')[0];
+        } else if (location.includes('www.tiktok.com')) {
+          result.id = location.split('/video/')[1].split('?')[0];
+        }
         resolve(result);
       }
     );
   })
 }
 
-const getDownloadingLinkTikTok = async url => {
+const getDownloadingLinkTikTok = async id => {
   const result = {
     ok: false,
     link: null,
     error: null,
   }
 
-  const convertURL = getTikTokID(url);
-
-  const videoMeta = await getVideoMeta(convertURL).catch((e) => {
+  const videoMeta = await getVideoMeta(`https://www.tiktok.com/@tiktok/video/${id}`).catch((e) => {
     result.error = e;
     return result;
   });
-
+  console.log(videoMeta)
   result.link = videoMeta.collector[0].videoUrl;
   result.ok = true;
   return result;
-}
-
-const getTikTokID = url => {
-  const id = url.split('.html')[0].split('/v/')[1];
-  return `https://www.tiktok.com/@tiktok/video/${id}`;
 }
 
 module.exports = {
