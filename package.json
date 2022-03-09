@@ -33,6 +33,6 @@
     "telegraf": "^4.5.2",
     "tiktok-downloader": "^0.0.4",
     "tiktok-scraper": "^1.4.36",
-    "ytdl-core": "^4.10.1"
+    "ytdl-core": "^4.11.0"
   }
 }
